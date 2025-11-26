@@ -10,12 +10,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Prevent submit for demo
-  const forms = document.querySelectorAll('form');
-  forms.forEach(form => {
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert('En una implementación real, este formulario enviaría los datos al servidor.');
-    });
-  });
+  // No automatic prevention of form submission so server endpoints can work
 });

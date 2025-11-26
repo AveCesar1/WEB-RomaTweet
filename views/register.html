@@ -100,26 +100,26 @@
                 <div class="d-flex align-items-center justify-content-center h-100">
                     <div class="w-75">
                         <h2 class="golden-text mb-4">Obtener Ciudadanía</h2>
-                        <form id="register-form">
+                        <form id="register-form" method="post" action="/register">
                             <div class="mb-3">
                                 <label for="register-name" class="form-label golden-text">Nombre Completo</label>
-                                <input type="text" class="form-control roman-input" id="register-name" placeholder="Ej: Cayo Julio César">
+                                <input type="text" name="register-name" class="form-control roman-input" id="register-name" placeholder="Ej: Cayo Julio César">
                             </div>
                             <div class="mb-3">
                                 <label for="register-username" class="form-label golden-text">Nombre de Ciudadano</label>
-                                <input type="text" class="form-control roman-input" id="register-username" placeholder="Ej: Julius_Caesar">
+                                <input type="text" name="register-username" class="form-control roman-input" id="register-username" placeholder="Ej: Julius_Caesar">
                             </div>
                             <div class="mb-3">
                                 <label for="register-email" class="form-label golden-text">Correo Electrónico</label>
-                                <input type="email" class="form-control roman-input" id="register-email" placeholder="Ej: cesar@senado.roma">
+                                <input type="email" name="register-email" class="form-control roman-input" id="register-email" placeholder="Ej: cesar@senado.roma">
                             </div>
                             <div class="mb-4">
                                 <label for="register-password" class="form-label golden-text">Contraseña</label>
-                                <input type="password" class="form-control roman-input" id="register-password" placeholder="Tu contraseña">
+                                <input type="password" name="register-password" class="form-control roman-input" id="register-password" placeholder="Tu contraseña">
                             </div>
                             <button type="submit" class="btn roman-btn w-100 mb-3">Registrarse</button>
                             <div class="text-center">
-                                <a href="login.html" class="golden-link">¿Ya tienes ciudadanía? Inicia sesión</a>
+                                <a href="/" class="golden-link">¿Ya tienes ciudadanía? Inicia sesión</a>
                             </div>
                         </form>
                     </div>

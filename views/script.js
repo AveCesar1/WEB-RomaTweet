@@ -1,4 +1,6 @@
 // script.js
+// No se sí siquiera se usa este archivo...
+// NO LE MUEVAS
 document.addEventListener('DOMContentLoaded', function() {
     // Contador de caracteres para nueva publicación (solo en post.html)
     const postContent = document.getElementById('post-content');
