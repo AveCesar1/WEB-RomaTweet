@@ -3,6 +3,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const database = require("better-sqlite3")("database.sql")
+const path = require('path');
 
 // env
 require('dotenv').config();
@@ -154,11 +155,25 @@ function requireAuth(req, res, next) {
 app.use(express.static("public"));
 
 // routes
-app.get('/', (req, res) => { app.render('login.html'); });
-app.get('/register', (req, res) => { app.render('register.html'); });
-app.get('/home', requireAuth, (req, res) => { app.render('home.html'); });
-app.get('/post', requireAuth, (req, res) => { app.render('post.html'); });
-app.get('/profile', requireAuth, (req, res) => { app.render('profile.html'); });
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'register.html'));
+});
+
+app.get('/home', requireAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'home.html'));
+});
+
+app.get('/post', requireAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'post.html'));
+});
+
+app.get('/profile', requireAuth, (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'profile.html'));
+});
 
 // listen
 app.listen(3030);
