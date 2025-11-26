@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RomanTweet - Registro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --marble-light: #f5f1e6;
+            --marble-medium: #e8dfca;
+            --marble-dark: #d4c9b0;
+            --bronze-dark: #8c7853;
+            --bronze-light: #b8a47e;
+            --terracotta: #a05c3c;
+            --terracotta-dark: #7a452d;
+            --text-dark: #3a2c1e;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--marble-light) 0%, var(--marble-medium) 100%);
+            color: var(--text-dark);
+            font-family: 'Times New Roman', serif;
+            min-height: 100vh;
+        }
+
+        .login-left {
+            background: linear-gradient(to bottom, var(--bronze-light), var(--marble-light));
+            color: var(--bronze-dark);
+        }
+
+        .login-right {
+            background: var(--marble-light);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(140, 120, 83, 0.08);
+            color: var(--text-dark);
+        }
+
+        .golden-text {
+            color: var(--bronze-dark) !important;
+        }
+
+        .roman-input {
+            background-color: var(--marble-light);
+            border: 1px solid var(--bronze-light);
+            color: var(--text-dark);
+        }
+
+        .roman-input:focus {
+            background-color: var(--marble-light);
+            border-color: var(--bronze-dark);
+            color: var(--text-dark);
+            box-shadow: 0 0 0 0.25rem rgba(140, 120, 83, 0.15);
+        }
+
+        .roman-btn {
+            background: linear-gradient(to bottom, var(--bronze-light), var(--bronze-dark));
+            color: var(--marble-light);
+            border: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .roman-btn:hover {
+            background: linear-gradient(to bottom, var(--bronze-dark), var(--terracotta-dark));
+            color: var(--marble-light);
+            transform: translateY(-2px);
+        }
+
+        .golden-link {
+            color: var(--terracotta);
+            text-decoration: none;
+        }
+
+        .golden-link:hover {
+            color: var(--bronze-dark);
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col-md-6 d-none d-md-flex login-left">
+                <div class="d-flex align-items-center justify-content-center h-100 w-100">
+                    <div class="text-center">
+                        <h1 class="display-3 golden-text mb-4">ROMANTWEET</h1>
+                        <p class="lead golden-text">Únete al foro del Imperio</p>
+                        <div class="mt-5">
+                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiPjxwYXRoIGZpbGw9IiNkNGJhNDAiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==" class="img-fluid" alt="Coliseo Romano">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 login-right">
+                <div class="d-flex align-items-center justify-content-center h-100">
+                    <div class="w-75">
+                        <h2 class="golden-text mb-4">Obtener Ciudadanía</h2>
+                        <form id="register-form">
+                            <div class="mb-3">
+                                <label for="register-name" class="form-label golden-text">Nombre Completo</label>
+                                <input type="text" class="form-control roman-input" id="register-name" placeholder="Ej: Cayo Julio César">
+                            </div>
+                            <div class="mb-3">
+                                <label for="register-username" class="form-label golden-text">Nombre de Ciudadano</label>
+                                <input type="text" class="form-control roman-input" id="register-username" placeholder="Ej: Julius_Caesar">
+                            </div>
+                            <div class="mb-3">
+                                <label for="register-email" class="form-label golden-text">Correo Electrónico</label>
+                                <input type="email" class="form-control roman-input" id="register-email" placeholder="Ej: cesar@senado.roma">
+                            </div>
+                            <div class="mb-4">
+                                <label for="register-password" class="form-label golden-text">Contraseña</label>
+                                <input type="password" class="form-control roman-input" id="register-password" placeholder="Tu contraseña">
+                            </div>
+                            <button type="submit" class="btn roman-btn w-100 mb-3">Registrarse</button>
+                            <div class="text-center">
+                                <a href="login.html" class="golden-link">¿Ya tienes ciudadanía? Inicia sesión</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

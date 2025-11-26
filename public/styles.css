@@ -1,0 +1,27 @@
+/* styles.css */
+:root {
+    --white: #FFFFFF;
+    --roman-dark: #140000;
+    --roman-red: #470000;
+    --roman-gold: #bf9b30;
+    --roman-light-gold: #d4ba40;
+}
+
+body {
+    background-color: var(--roman-dark);
+    color: white;
+    font-family: 'Times New Roman', serif;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-left {
+        display: none !important;
+    }
+    
+    .login-right {
+        width: 100%;
+    }
+}
