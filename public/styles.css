@@ -21,21 +21,32 @@ body {
 .roman-navbar {
   background: linear-gradient(to right, var(--bronze-dark), var(--bronze-light));
   border-bottom: 4px solid var(--terracotta);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.navbar-brand { font-weight: bold; font-size: 1.8rem; }
-.nav-link { color: var(--marble-light) !important; font-weight: 500; }
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.nav-link {
+  color: var(--marble-light) !important;
+  font-weight: 500;
+}
 
 /* Cards */
 .roman-card {
   background-color: var(--marble-light);
   border: 1px solid var(--bronze-light);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.roman-card:hover { transform: translateY(-5px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+
+.roman-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
 
 /* Buttons & inputs */
 .roman-btn {
@@ -44,12 +55,14 @@ body {
   border: none;
   font-weight: bold;
 }
+
 .roman-outline-btn {
   background: transparent;
   color: var(--bronze-dark);
   border: 1px solid var(--bronze-dark);
   font-weight: bold;
 }
+
 .roman-input {
   background-color: var(--marble-light);
   border: 1px solid var(--bronze-light);
@@ -57,14 +70,38 @@ body {
 }
 
 /* Text utilities */
-.golden-text { color: var(--bronze-dark) !important; }
-.decorative-border { border-left: 3px solid var(--terracotta); padding-left: 15px; }
-.hashtag { color: var(--terracotta); font-weight: bold; }
-.time-meta { color: var(--bronze-light); font-size: 0.85rem; }
-.author-text { color: var(--bronze-dark); font-weight: bold; }
+.golden-text {
+  color: var(--bronze-dark) !important;
+}
+
+.decorative-border {
+  border-left: 3px solid var(--terracotta);
+  padding-left: 15px;
+}
+
+.hashtag {
+  color: var(--terracotta);
+  font-weight: bold;
+}
+
+.time-meta {
+  color: var(--bronze-light);
+  font-size: 0.85rem;
+}
+
+.author-text {
+  color: var(--bronze-dark);
+  font-weight: bold;
+}
 
 /* Avatar */
-.user-avatar { border: 2px solid var(--bronze-light); padding: 3px; width:48px; height:48px; object-fit:cover; }
+.user-avatar {
+  border: 2px solid var(--bronze-light);
+  padding: 3px;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+}
 
 /* Pattern used on home page */
 .roman-pattern {
@@ -73,6 +110,9 @@ body {
 
 /* Page namespace helpers (no visual changes) */
 .page-auth {}
+
 .page-home {}
+
 .page-post {}
+
 .page-profile {}
