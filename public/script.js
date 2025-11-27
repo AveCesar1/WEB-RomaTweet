@@ -23,11 +23,14 @@ function escapeHtml(str) {
 // Format content: escape text and wrap hashtags (#word) in a span.hashtag
 function formatHashtags(text) {
   if (!text) return '';
-  // split by word boundaries, replace hashtags while preserving surrounding whitespace/punctuation
-  // escape parts and replace hashtags safely
-  return String(text).replace(/(^|\s)(#[A-Za-z0-9_\-]+)/g, function(_, pre, tag) {
-    return pre + '<span class="hashtag">' + escapeHtml(tag) + '</span>';
-  }).replace(/\n/g, '<br>');
+  // Use Unicode property escapes to allow accented letters, ñ, etc.
+  // Matches a '#' followed by letters, numbers, marks (accents), underscore or hyphen
+  const re = /(^|\s)(#[\p{L}\p{N}\p{M}_-]+)/gu;
+  return String(text)
+    .replace(re, function(match, pre, tag) {
+      return pre + '<span class="hashtag">' + escapeHtml(tag) + '</span>';
+    })
+    .replace(/\n/g, '<br>');
 }
 
 function timeAgo(iso) {
