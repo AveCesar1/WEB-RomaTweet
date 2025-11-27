@@ -293,7 +293,7 @@ app.get('/api/feed', requireAuth, (req, res) => {
              (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comments_count
       FROM posts p
       JOIN users u ON p.user_id = u.id
-      ORDER BY p.created_at DESC
+      ORDER BY likes_count DESC, p.created_at DESC
       LIMIT 100
     `).all();
     rows.forEach(r => normalizeRowDates(r, ['created_at', 'edited_at']));
