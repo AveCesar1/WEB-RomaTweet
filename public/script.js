@@ -20,6 +20,16 @@ function escapeHtml(str) {
   });
 }
 
+// Format content: escape text and wrap hashtags (#word) in a span.hashtag
+function formatHashtags(text) {
+  if (!text) return '';
+  // split by word boundaries, replace hashtags while preserving surrounding whitespace/punctuation
+  // escape parts and replace hashtags safely
+  return String(text).replace(/(^|\s)(#[A-Za-z0-9_\-]+)/g, function(_, pre, tag) {
+    return pre + '<span class="hashtag">' + escapeHtml(tag) + '</span>';
+  }).replace(/\n/g, '<br>');
+}
+
 function timeAgo(iso) {
   const d = new Date(iso);
   const diff = Date.now() - d.getTime();
@@ -39,7 +49,7 @@ function renderPost(post) {
         <img src="${escapeHtml(avatar)}" class="rounded-circle me-3 user-avatar" alt="avatar">
         <div>
           <h6 class="author-text mb-0">${escapeHtml(post.full_name || post.username)} <span class="time-meta">@${escapeHtml(post.username)} · ${timeAgo(post.created_at)}</span></h6>
-          <p class="golden-text mt-2 decorative-border">${escapeHtml(post.content)}</p>
+          <p class="golden-text mt-2 decorative-border">${formatHashtags(post.content)}</p>
           <div class="d-flex justify-content-between mt-3">
             <button class="btn roman-icon-btn"><i class="fas fa-comment"></i></button>
             <button class="btn roman-icon-btn"><i class="fas fa-retweet"></i></button>
