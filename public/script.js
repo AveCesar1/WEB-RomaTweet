@@ -1,9 +1,9 @@
 // public/script.js
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const postContent = document.getElementById('post-content');
   const charCount = document.getElementById('char-count');
   if (postContent && charCount) {
-    postContent.addEventListener('input', function() {
+    postContent.addEventListener('input', function () {
       const remaining = 280 - this.value.length;
       charCount.textContent = `${remaining} caracteres restantes`;
       if (remaining < 0) charCount.classList.add('text-danger'); else charCount.classList.remove('text-danger');
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function escapeHtml(str) {
   if (!str) return '';
   return String(str).replace(/[&<>"']/g, function (m) {
-    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m];
+    return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
   });
 }
 
@@ -27,7 +27,7 @@ function formatHashtags(text) {
   // Matches a '#' followed by letters, numbers, marks (accents), underscore or hyphen
   const re = /(^|\s)(#[\p{L}\p{N}\p{M}_-]+)/gu;
   return String(text)
-    .replace(re, function(match, pre, tag) {
+    .replace(re, function (match, pre, tag) {
       return pre + '<span class="hashtag">' + escapeHtml(tag) + '</span>';
     })
     .replace(/\n/g, '<br>');
@@ -36,28 +36,31 @@ function formatHashtags(text) {
 function timeAgo(iso) {
   const d = new Date(iso);
   const diff = Date.now() - d.getTime();
-  const sec = Math.floor(diff/1000);
+  const sec = Math.floor(diff / 1000);
   if (sec < 60) return sec + 's';
-  const min = Math.floor(sec/60); if (min < 60) return min + 'm';
-  const h = Math.floor(min/60); if (h < 24) return h + 'h';
-  const days = Math.floor(h/24); return days + 'd';
+  const min = Math.floor(sec / 60); if (min < 60) return min + 'm';
+  const h = Math.floor(min / 60); if (h < 24) return h + 'h';
+  const days = Math.floor(h / 24); return days + 'd';
 }
 
 // render single post card
 function renderPost(post) {
   const avatar = post.avatar || 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==';
+  const likes = Number(post.likes_count || 0);
+  const comments = Number(post.comments_count || 0);
+  const likedClass = post.liked ? 'liked' : '';
   return `
-    <div class="card roman-card mb-3">
+    <div class="card roman-card mb-3" data-post-id="${escapeHtml(String(post.id || ''))}">
       <div class="card-body d-flex">
         <img src="${escapeHtml(avatar)}" class="rounded-circle me-3 user-avatar" alt="avatar">
-        <div>
+        <div style="flex:1">
           <h6 class="author-text mb-0">${escapeHtml(post.full_name || post.username)} <span class="time-meta">@${escapeHtml(post.username)} · ${timeAgo(post.created_at)}</span></h6>
           <p class="golden-text mt-2 decorative-border">${formatHashtags(post.content)}</p>
           <div class="d-flex justify-content-between mt-3">
-            <button class="btn roman-icon-btn"><i class="fas fa-comment"></i></button>
-            <button class="btn roman-icon-btn"><i class="fas fa-retweet"></i></button>
-            <button class="btn roman-icon-btn"><i class="fas fa-heart"></i></button>
-            <button class="btn roman-icon-btn"><i class="fas fa-share"></i></button>
+            <button class="btn roman-icon-btn btn-comment" data-post-id="${escapeHtml(String(post.id || ''))}" aria-label="Comentar"><i class="fas fa-comment"></i> <span class="count">${comments}</span></button>
+            <button class="btn roman-icon-btn btn-retweet" data-post-id="${escapeHtml(String(post.id || ''))}" aria-label="Retuitear"><i class="fas fa-retweet"></i></button>
+            <button class="btn roman-icon-btn btn-like ${likedClass}" data-post-id="${escapeHtml(String(post.id || ''))}" aria-pressed="${post.liked ? 'true' : 'false'}" aria-label="Me gusta"><i class="fas fa-heart"></i> <span class="count">${likes}</span></button>
+            <button class="btn roman-icon-btn btn-share" data-post-id="${escapeHtml(String(post.id || ''))}" aria-label="Compartir"><i class="fas fa-share"></i></button>
           </div>
         </div>
       </div>
@@ -119,7 +122,7 @@ async function initHome() {
     const feed = feedRes.ok ? await feedRes.json() : { posts: [] };
     const top = topRes.ok ? await topRes.json() : { users: [] };
 
-    renderLeftProfile(me.user, me.counts || { posts:0, followers:0 });
+    renderLeftProfile(me.user, me.counts || { posts: 0, followers: 0 });
     renderTopUsers(top.users || []);
 
     const feedContainer = document.getElementById('feed-container');
@@ -136,9 +139,9 @@ async function initHome() {
         e.preventDefault();
         const content = document.getElementById('new-post-content').value;
         if (!content || !content.trim()) return alert('Contenido vacío');
-        const r = await fetch('/api/me/posts', { method: 'POST', headers: { 'Content-Type':'application/json' }, body: JSON.stringify({ content }) });
+        const r = await fetch('/api/me/posts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content }) });
         if (!r.ok) {
-          const err = await r.json().catch(()=>({}));
+          const err = await r.json().catch(() => ({}));
           return alert('Error: ' + (err.error || 'no se pudo publicar'));
         }
         const data = await r.json();
@@ -152,3 +155,60 @@ async function initHome() {
     console.error(err);
   }
 }
+
+// delegate click handlers for like and comment buttons across the document
+document.addEventListener('click', async function (e) {
+  try {
+    const likeBtn = e.target.closest && e.target.closest('.btn-like');
+    if (likeBtn) {
+      const postId = likeBtn.dataset.postId;
+      if (!postId) return;
+      likeBtn.disabled = true;
+      // optimistic UI toggle could be added here; use server response as source of truth
+      const res = await fetch(`/api/posts/${encodeURIComponent(postId)}/like`, { method: 'POST' });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert('Error al actualizar like: ' + (err.error || res.statusText));
+        return;
+      }
+      const data = await res.json();
+      const countSpan = likeBtn.querySelector('.count');
+      if (countSpan) countSpan.textContent = data.likes_count;
+      if (data.liked) {
+        likeBtn.classList.add('liked');
+        likeBtn.setAttribute('aria-pressed', 'true');
+      } else {
+        likeBtn.classList.remove('liked');
+        likeBtn.setAttribute('aria-pressed', 'false');
+      }
+      return;
+    }
+
+    const commentBtn = e.target.closest && e.target.closest('.btn-comment');
+    if (commentBtn) {
+      const postId = commentBtn.dataset.postId;
+      if (!postId) return;
+      // show a simple prompt for the comment (keeps UI minimal and doesn't change HTML structure)
+      const content = prompt('Escribe tu comentario:');
+      if (!content || !content.trim()) return;
+      commentBtn.disabled = true;
+      const res = await fetch(`/api/posts/${encodeURIComponent(postId)}/comments`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ content }) });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        alert('Error al publicar comentario: ' + (err.error || res.statusText));
+        return;
+      }
+      const data = await res.json();
+      // update comments count in the button
+      const countSpan = commentBtn.querySelector('.count');
+      if (countSpan) countSpan.textContent = data.comments_count;
+      return;
+    }
+  } catch (err) {
+    console.error('action error', err);
+  } finally {
+    // re-enable any buttons that were disabled (best-effort)
+    const btn = e.target.closest && e.target.closest('button[disabled]');
+    if (btn) btn.disabled = false;
+  }
+});

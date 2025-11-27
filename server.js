@@ -49,10 +49,10 @@ function decryptCookie(encrypted) {
 
 // DB pragmas & schema
 try {
-    database.pragma('journal_mode = WAL');
-    database.pragma('foreign_keys = ON');
+  database.pragma('journal_mode = WAL');
+  database.pragma('foreign_keys = ON');
 } catch (err) {
-    console.error('SQLite pragma error:', err);
+  console.error('SQLite pragma error:', err);
 }
 
 const initSql = `
@@ -107,14 +107,14 @@ CREATE TABLE IF NOT EXISTS comments (
 `;
 
 try {
-    database.exec(initSql);
-    database.exec(`
+  database.exec(initSql);
+  database.exec(`
       CREATE INDEX IF NOT EXISTS idx_posts_user ON posts(user_id);
       CREATE INDEX IF NOT EXISTS idx_posts_created ON posts(created_at);
       CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
     `);
 } catch (err) {
-    console.error('Failed to initialize database schema:', err);
+  console.error('Failed to initialize database schema:', err);
 }
 
 // express config
@@ -225,13 +225,21 @@ app.get('/api/me', requireAuth, (req, res) => {
   }
 });
 
-// API: current user posts
+// API: current user posts (include counts)
 app.get('/api/me/posts', requireAuth, (req, res) => {
   try {
     const userId = req.session && req.session.user_id;
     if (!userId) return res.status(401).json({ error: 'unauthorized' });
-    const posts = database.prepare('SELECT id, content, created_at, edited_at FROM posts WHERE user_id = ? ORDER BY created_at DESC LIMIT 100').all(userId);
-    posts.forEach(p => normalizeRowDates(p, ['created_at','edited_at']));
+    const posts = database.prepare(`
+      SELECT p.id, p.content, p.created_at, p.edited_at,
+        (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS likes_count,
+        (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comments_count
+      FROM posts p
+      WHERE p.user_id = ?
+      ORDER BY p.created_at DESC
+      LIMIT 100
+    `).all(userId);
+    posts.forEach(p => normalizeRowDates(p, ['created_at', 'edited_at']));
     res.json({ posts });
   } catch (err) {
     console.error(err);
@@ -275,18 +283,20 @@ app.get('/api/me/following', requireAuth, (req, res) => {
   }
 });
 
-// API: feed - recent posts with author info
+// API: feed - recent posts with author info and counts
 app.get('/api/feed', requireAuth, (req, res) => {
   try {
     const rows = database.prepare(`
       SELECT p.id, p.content, p.created_at, p.edited_at,
-             u.id AS user_id, u.full_name, u.username, u.avatar
+             u.id AS user_id, u.full_name, u.username, u.avatar,
+             (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS likes_count,
+             (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comments_count
       FROM posts p
       JOIN users u ON p.user_id = u.id
       ORDER BY p.created_at DESC
       LIMIT 100
     `).all();
-    rows.forEach(r => normalizeRowDates(r, ['created_at','edited_at']));
+    rows.forEach(r => normalizeRowDates(r, ['created_at', 'edited_at']));
     res.json({ posts: rows });
   } catch (err) {
     console.error(err);
@@ -315,20 +325,20 @@ app.get('/api/users/top', requireAuth, (req, res) => {
 // register
 app.post('/register', async (req, res) => {
   try {
-    const { 
-        'register-name': full_name, 
-        'register-username': username, 
-        'register-email': email, 
-        'register-password': password 
+    const {
+      'register-name': full_name,
+      'register-username': username,
+      'register-email': email,
+      'register-password': password
     } = req.body;
 
-    if (!full_name || !username || !password) 
-        return res.status(400).send('Missing fields');
+    if (!full_name || !username || !password)
+      return res.status(400).send('Missing fields');
 
     // check existing
     const exists = database.prepare('SELECT id FROM users WHERE username = ? OR email = ?').get(username, email || null);
-    if (exists) 
-        return res.status(409).send('User already exists');
+    if (exists)
+      return res.status(409).send('User already exists');
 
     const password_hash = await hashPassword(password);
     const info = database.prepare('INSERT INTO users (full_name, username, email, password_hash) VALUES (?, ?, ?, ?)').run(full_name, username, email || null, password_hash);
@@ -352,15 +362,15 @@ app.post('/login', async (req, res) => {
   try {
     const { 'login-email': username, 'login-password': password } = req.body;
     if (!username || !password)
-         return res.status(400).send('Missing fields');
+      return res.status(400).send('Missing fields');
 
     const user = database.prepare('SELECT id, username, password_hash FROM users WHERE username = ?').get(username);
-    if (!user) 
-        return res.status(401).send('Invalid credentials');
+    if (!user)
+      return res.status(401).send('Invalid credentials');
 
     const ok = await verifyPassword(password, user.password_hash);
-    if (!ok) 
-        return res.status(401).send('Invalid credentials');
+    if (!ok)
+      return res.status(401).send('Invalid credentials');
 
     const expiresMs = Date.now() + 30 * 60 * 1000;
     const payload = { user_id: user.id, username: user.username, expires_at: expiresMs };
@@ -373,6 +383,8 @@ app.post('/login', async (req, res) => {
     return res.status(500).send('Server error');
   }
 });
+
+// maestra si ve esto, soy su fan :D
 
 // logout
 app.get('/logout', (req, res) => {
@@ -391,7 +403,7 @@ app.post('/api/me/posts', requireAuth, (req, res) => {
     const info = database.prepare('INSERT INTO posts (user_id, content) VALUES (?, ?)').run(userId, String(content).trim());
     const postId = info && (info.lastInsertRowid || info.lastInsertRowId || info.lastInsertRowid);
     const post = database.prepare('SELECT id, content, created_at, edited_at FROM posts WHERE id = ?').get(postId);
-    normalizeRowDates(post, ['created_at','edited_at']);
+    normalizeRowDates(post, ['created_at', 'edited_at']);
     return res.json({ ok: true, post });
   } catch (err) {
     console.error(err);
@@ -413,7 +425,7 @@ app.get('/api/me/likes', requireAuth, (req, res) => {
       ORDER BY l.created_at DESC
       LIMIT 100
     `).all(userId) || [];
-    rows.forEach(r => normalizeRowDates(r, ['created_at','liked_at']));
+    rows.forEach(r => normalizeRowDates(r, ['created_at', 'liked_at']));
     res.json({ posts: rows });
   } catch (err) {
     console.error(err);
@@ -438,6 +450,78 @@ app.get('/api/me/replies', requireAuth, (req, res) => {
     `).all(userId) || [];
     rows.forEach(r => normalizeRowDates(r, ['commented_at']));
     res.json({ replies: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// API: toggle like for a post
+app.post('/api/posts/:id/like', requireAuth, (req, res) => {
+  try {
+    const userId = req.session && req.session.user_id;
+    const postId = Number(req.params.id);
+    if (!userId) return res.status(401).json({ error: 'unauthorized' });
+    const post = database.prepare('SELECT id FROM posts WHERE id = ?').get(postId);
+    if (!post) return res.status(404).json({ error: 'post_not_found' });
+
+    const exists = database.prepare('SELECT id FROM likes WHERE user_id = ? AND post_id = ?').get(userId, postId);
+    let liked = false;
+    if (exists) {
+      database.prepare('DELETE FROM likes WHERE id = ?').run(exists.id);
+      liked = false;
+    } else {
+      database.prepare('INSERT INTO likes (user_id, post_id) VALUES (?, ?)').run(userId, postId);
+      liked = true;
+    }
+    const likesCount = database.prepare('SELECT COUNT(*) as cnt FROM likes WHERE post_id = ?').get(postId).cnt || 0;
+    res.json({ liked, likes_count: likesCount });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// API: get comments for a post
+app.get('/api/posts/:id/comments', requireAuth, (req, res) => {
+  try {
+    const postId = Number(req.params.id);
+    const rows = database.prepare(`
+      SELECT c.id, c.content, c.created_at, u.id AS user_id, u.full_name, u.username
+      FROM comments c
+      JOIN users u ON c.user_id = u.id
+      WHERE c.post_id = ?
+      ORDER BY c.created_at ASC
+      LIMIT 500
+    `).all(postId) || [];
+    rows.forEach(r => { if (r.created_at) r.created_at = toIsoUtc(r.created_at); });
+    res.json({ comments: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// API: create comment for a post
+app.post('/api/posts/:id/comments', requireAuth, (req, res) => {
+  try {
+    const userId = req.session && req.session.user_id;
+    const postId = Number(req.params.id);
+    if (!userId) 
+      return res.status(401).json({ error: 'unauthorized' });
+    const { content } = req.body || {};
+    if (!content || !String(content).trim()) 
+      return res.status(400).json({ error: 'empty' });
+    const post = database.prepare('SELECT id FROM posts WHERE id = ?').get(postId);
+    if (!post) 
+      return res.status(404).json({ error: 'post_not_found' });
+    const info = database.prepare('INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)').run(postId, userId, String(content).trim());
+    const commentId = info && (info.lastInsertRowid || info.lastInsertRowId || info.lastInsertRowid);
+    const comment = database.prepare('SELECT c.id, c.content, c.created_at, u.id AS user_id, u.full_name, u.username FROM comments c JOIN users u ON c.user_id = u.id WHERE c.id = ?').get(commentId);
+    if (comment && comment.created_at) 
+      comment.created_at = toIsoUtc(comment.created_at);
+    const commentsCount = database.prepare('SELECT COUNT(*) as cnt FROM comments WHERE post_id = ?').get(postId).cnt || 0;
+    res.json({ ok: true, comment, comments_count: commentsCount });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'server_error' });
