@@ -364,5 +364,48 @@ app.post('/api/me/posts', requireAuth, (req, res) => {
   }
 });
 
+// API: posts liked by current user
+app.get('/api/me/likes', requireAuth, (req, res) => {
+  try {
+    const userId = req.session && req.session.user_id;
+    if (!userId) return res.status(401).json({ error: 'unauthorized' });
+    const rows = database.prepare(`
+      SELECT p.id, p.content, p.created_at, u.id AS user_id, u.full_name, u.username, u.avatar, l.created_at AS liked_at
+      FROM likes l
+      JOIN posts p ON l.post_id = p.id
+      JOIN users u ON p.user_id = u.id
+      WHERE l.user_id = ?
+      ORDER BY l.created_at DESC
+      LIMIT 100
+    `).all(userId) || [];
+    res.json({ posts: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// API: comments/replies authored by current user (with parent post preview)
+app.get('/api/me/replies', requireAuth, (req, res) => {
+  try {
+    const userId = req.session && req.session.user_id;
+    if (!userId) return res.status(401).json({ error: 'unauthorized' });
+    const rows = database.prepare(`
+      SELECT c.id AS comment_id, c.content AS comment, c.created_at AS commented_at,
+             p.id AS post_id, p.content AS post_content, pu.id AS post_owner_id, pu.username AS post_owner_username, pu.full_name AS post_owner_full_name
+      FROM comments c
+      JOIN posts p ON c.post_id = p.id
+      JOIN users pu ON p.user_id = pu.id
+      WHERE c.user_id = ?
+      ORDER BY c.created_at DESC
+      LIMIT 100
+    `).all(userId) || [];
+    res.json({ replies: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
 // listen
 app.listen(3030);
