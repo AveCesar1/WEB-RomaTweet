@@ -6,8 +6,11 @@ Pequeña red social temátizada en la Antigua Roma — proyecto para la asignatu
 - Joaquín Gutiérrez Díaz — 22300907
 - David Israel Gómez Méndez — 22300926
 
+### Organización
 - Docente: Mtra. Paola Fernández Ponce Villazo
-- Programa: Tecnólogo en Desarrollo de Software — 7E1
+- Escuela: Centro de Enseñanza Técnica Industrial (CETI)
+- Programa: Tecnólogo en Desarrollo de Software
+- Grado y Grupo: 7E1
 
 ## Descripción
 Backend en Node.js + Express con base de datos SQLite (better-sqlite3). Interfaz estática en `views/` y assets en `public/`. Soporta registro, inicio de sesión (cookies cifradas), creación de edictos (posts), perfil de usuario y un feed.
