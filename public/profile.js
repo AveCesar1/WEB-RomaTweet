@@ -115,9 +115,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const j = await r.json(); const posts = j.posts || [];
     postsContainer.innerHTML = '';
     if (posts.length === 0) postsContainer.innerHTML = '<p class="text-muted">No tienes edictos marcados con me gusta.</p>';
+    // default avatar for liked messages (provided by the user)
+    const defaultLikedAvatar = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2Q0YmE0MCIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMxYTAwMDAiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzFhMDAwMCIvPjwvc3ZnPg==';
     for (const post of posts) {
       const div = document.createElement('div'); div.className = 'post-item mb-4 pb-3 golden-border-bottom';
-      div.innerHTML = `<div class="d-flex"><img src="${escapeHtml(post.avatar||'')}" class="rounded-circle me-3 user-avatar" alt="Avatar"><div><h6 class="author-text mb-0">${escapeHtml(post.full_name||post.username)} <span class="time-meta">@${escapeHtml(post.username)} · ${timeAgo(new Date(post.created_at))}</span></h6><p class="golden-text mt-2 decorative-border">${escapeHtml(post.content)}</p></div></div>`;
+      const avatarSrc = post.avatar || defaultLikedAvatar;
+      div.innerHTML = `<div class="d-flex"><img src="${escapeHtml(avatarSrc)}" class="rounded-circle me-3 user-avatar" alt="Avatar"><div><h6 class="author-text mb-0">${escapeHtml(post.full_name||post.username)} <span class="time-meta">@${escapeHtml(post.username)} · ${timeAgo(new Date(post.created_at))}</span></h6><p class="golden-text mt-2 decorative-border">${escapeHtml(post.content)}</p></div></div>`;
       postsContainer.appendChild(div);
     }
   }
