@@ -120,6 +120,7 @@ try {
 // express config
 const app = express();
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET || 'please_change_this_secret'));
 
 // attach helpers to req
@@ -241,6 +242,42 @@ app.get('/api/me/following', requireAuth, (req, res) => {
   }
 });
 
+// API: feed - recent posts with author info
+app.get('/api/feed', requireAuth, (req, res) => {
+  try {
+    const rows = database.prepare(`
+      SELECT p.id, p.content, p.created_at, p.edited_at,
+             u.id AS user_id, u.full_name, u.username, u.avatar
+      FROM posts p
+      JOIN users u ON p.user_id = u.id
+      ORDER BY p.created_at DESC
+      LIMIT 100
+    `).all();
+    res.json({ posts: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
+// API: top users by follower count (for sidebar suggestions)
+app.get('/api/users/top', requireAuth, (req, res) => {
+  try {
+    const rows = database.prepare(`
+      SELECT u.id, u.full_name, u.username, u.avatar, u.bio, COUNT(f.follower_id) AS followers_count
+      FROM users u
+      LEFT JOIN followers f ON f.followed_id = u.id
+      GROUP BY u.id
+      ORDER BY followers_count DESC
+      LIMIT 5
+    `).all();
+    res.json({ users: rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'server_error' });
+  }
+});
+
 // register
 app.post('/register', async (req, res) => {
   try {
@@ -307,6 +344,24 @@ app.post('/login', async (req, res) => {
 app.get('/logout', (req, res) => {
   res.clearCookie('session');
   res.redirect('/');
+});
+
+// API: create a new post for current user
+app.post('/api/me/posts', requireAuth, (req, res) => {
+  try {
+    const userId = req.session && req.session.user_id;
+    if (!userId) return res.status(401).json({ error: 'unauthorized' });
+    const content = (req.body && (req.body.content || req.body.post_content)) || '';
+    if (!content || String(content).trim().length === 0) return res.status(400).json({ error: 'empty' });
+    if (String(content).length > 1000) return res.status(400).json({ error: 'too_long' });
+    const info = database.prepare('INSERT INTO posts (user_id, content) VALUES (?, ?)').run(userId, String(content).trim());
+    const postId = info && (info.lastInsertRowid || info.lastInsertRowId || info.lastInsertRowid);
+    const post = database.prepare('SELECT id, content, created_at, edited_at FROM posts WHERE id = ?').get(postId);
+    return res.json({ ok: true, post });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'server_error' });
+  }
 });
 
 // listen

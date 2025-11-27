@@ -184,7 +184,7 @@
 <body class="page-post">
     <nav class="navbar navbar-expand-lg roman-navbar">
         <div class="container">
-            <a class="navbar-brand" href="home.html">
+            <a class="navbar-brand" href="/home">
                 <i class="fas fa-landmark me-2"></i>ROMANTWEET
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -193,17 +193,17 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="home.html"><i class="fas fa-home me-1"></i> Foro</a>
+                        <a class="nav-link" href="/home"><i class="fas fa-home me-1"></i> Foro</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="post.html"><i class="fas fa-scroll me-1"></i> Escribir Edicto</a>
+                        <a class="nav-link active" href="/post"><i class="fas fa-scroll me-1"></i> Escribir Edicto</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="profile.html"><i class="fas fa-user me-1"></i> Mi Perfil</a>
+                        <a class="nav-link" href="/profile"><i class="fas fa-user me-1"></i> Mi Perfil</a>
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <a class="btn roman-outline-btn me-2" href="login.html"><i class="fas fa-sign-out-alt me-1"></i> Salir del Foro</a>
+                    <a class="btn roman-outline-btn me-2" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Salir del Foro</a>
                 </div>
             </div>
         </div>
@@ -218,16 +218,16 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex mb-4">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2Q0YmE0MCIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMxYTAwMDAiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzFhMDAwMCIvPjwvc3ZnPg==" class="rounded-circle me-3" alt="Avatar">
+                            <img id="profile-avatar" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2Q0YmE0MCIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMxYTAwMDAiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzFhMDAwMCIvPjwvc3ZnPg==" class="rounded-circle me-3" alt="Avatar">
                             <div class="w-100">
-                                <h5 class="golden-text mb-1">Cayo Julio César</h5>
-                                <p class="text-muted mb-0">@Julius_Caesar</p>
+                                <h5 id="profile-fullname" class="golden-text mb-1">Cayo Julio César</h5>
+                                <p id="profile-username" class="text-muted mb-0">@Julius_Caesar</p>
                             </div>
                         </div>
                         
                         <form id="new-post-form">
                             <div class="mb-3">
-                                <textarea class="form-control roman-input" id="post-content" rows="5" placeholder="¿Qué está pasando en el Imperio?"></textarea>
+                                <textarea class="form-control roman-input" id="post-content" name="post_content" rows="5" placeholder="¿Qué está pasando en el Imperio?"></textarea>
                                 <div class="d-flex justify-content-between mt-2">
                                     <small class="text-muted" id="char-count">280 caracteres restantes</small>
                                 </div>
@@ -244,15 +244,8 @@
                     <div class="card-header golden-border-bottom">
                         <h5 class="golden-text mb-0">Tus edictos recientes</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="post-preview mb-3 pb-3 golden-border-bottom">
-                            <p class="golden-text decorative-border">¡Veni, vidi, vici! Tres palabras que resumen nuestra campaña en el Ponto. La gloria de Roma brilla más que nunca. <span class="hashtag">#Victoria</span> <span class="hashtag">#RomaEterna</span></p>
-                            <small class="text-muted">Publicado hace 2 días</small>
-                        </div>
-                        <div class="post-preview">
-                            <p class="golden-text decorative-border">El nuevo calendario juliano entrará en vigor el próximo año. Mayor precisión para honrar a los dioses y organizar nuestra sociedad. <span class="hashtag">#CalendarioJuliano</span> <span class="hashtag">#Progreso</span></p>
-                            <small class="text-muted">Publicado hace 5 días</small>
-                        </div>
+                    <div class="card-body" id="recent-posts">
+                        <p class="text-muted">Cargando edictos...</p>
                     </div>
                 </div>
             </div>
@@ -261,5 +254,82 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const postForm = document.getElementById('new-post-form');
+      const contentEl = document.getElementById('post-content');
+      const charCount = document.getElementById('char-count');
+      const recentEl = document.getElementById('recent-posts');
+
+      // fetch profile and fill header
+      fetch('/api/me', { credentials: 'same-origin' }).then(r => {
+        if (r.status === 401) return window.location = '/';
+        return r.json();
+      }).then(data => {
+        if (!data) return;
+        const u = data.user;
+        if (u) {
+          const avatar = document.getElementById('profile-avatar');
+          if (avatar && u.avatar) avatar.src = u.avatar;
+          const fn = document.getElementById('profile-fullname'); if (fn) fn.textContent = u.full_name || u.username;
+          const un = document.getElementById('profile-username'); if (un) un.textContent = '@' + (u.username || '');
+        }
+      }).catch(()=>window.location='/');
+
+      // load recent posts
+      async function loadPosts(){
+        try{
+          const r = await fetch('/api/me/posts', { credentials: 'same-origin' });
+          if (r.status === 401) return window.location = '/';
+          const j = await r.json();
+          const posts = j.posts || [];
+          recentEl.innerHTML = '';
+          if (posts.length === 0) recentEl.innerHTML = '<p class="text-muted">No tienes edictos aún.</p>';
+          for (const p of posts) {
+            const div = document.createElement('div');
+            div.className = 'post-preview mb-3 pb-3 golden-border-bottom';
+            div.innerHTML = `<p class="golden-text decorative-border">${escapeHtml(p.content)}</p><small class="text-muted">${timeAgo(new Date(p.created_at))}</small>`;
+            recentEl.appendChild(div);
+          }
+        }catch(e){console.error(e)}
+      }
+
+      loadPosts();
+
+      postForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const content = contentEl.value || '';
+        if (!content.trim()) return alert('El contenido no puede estar vacío');
+        try{
+          const r = await fetch('/api/me/posts', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content })
+          });
+          if (r.status === 401) return window.location = '/';
+          const j = await r.json();
+          if (j && j.post) {
+            contentEl.value = '';
+            loadPosts();
+          } else {
+            alert('Error al publicar');
+          }
+        }catch(err){console.error(err); alert('Error al publicar');}
+      });
+
+      // char counter (in case public/script.js not loaded yet)
+      if (contentEl && charCount) {
+        contentEl.addEventListener('input', function(){
+          const remaining = 280 - this.value.length;
+          charCount.textContent = `${remaining} caracteres restantes`;
+          if (remaining < 0) charCount.classList.add('text-danger'); else charCount.classList.remove('text-danger');
+        });
+      }
+
+      function escapeHtml(str){ if (!str) return ''; return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[s]); }
+      function timeAgo(d){ try{ const ms = Date.now() - new Date(d).getTime(); const sec = Math.floor(ms/1000); if (sec<60) return sec+'s'; const min=Math.floor(sec/60); if (min<60) return min+'m'; const hr=Math.floor(min/60); if (hr<24) return hr+'h'; const days=Math.floor(hr/24); return days+'d'; }catch(e){return ''} }
+    });
+    </script>
 </body>
 </html>

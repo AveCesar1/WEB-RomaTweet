@@ -242,161 +242,65 @@
 
     <div class="container mt-4">
         <div class="row">
-            <!-- Columna izquierda -->
+            <!-- Columna izquierda (perfil dinámico) -->
             <div class="col-md-3">
-                <div class="card roman-card mb-4">
+                <div id="left-profile" class="card roman-card mb-4">
                     <div class="card-body text-center">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==" class="rounded-circle mb-3 user-avatar" alt="Avatar">
-                        <h5 class="author-text">Cayo Julio César</h5>
-                        <p class="text-muted">@Julius_Caesar</p>
-                        <div class="d-flex justify-content-around mt-3">
-                            <div class="text-center">
-                                <div class="stat-number">245</div>
-                                <div class="stat-label">Seguidores</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="stat-number">178</div>
-                                <div class="stat-label">Siguiendo</div>
-                            </div>
+                        <!-- filled by JS -->
+                        <div class="placeholder-glow py-4">
+                            <span class="placeholder col-6 rounded-circle" style="height:48px; width:48px; display:inline-block"></span>
+                            <h5 class="mt-3 placeholder col-8"></h5>
+                            <p class="text-muted placeholder col-6"></p>
                         </div>
                     </div>
                 </div>
-                
-                <div class="card roman-card">
+                <div id="sidebar-top-users" class="card roman-card">
                     <div class="card-header">
                         <h5 class="mb-0"><i class="fas fa-users me-2"></i>Legionarios Destacados</h5>
                     </div>
                     <div class="card-body">
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==" class="rounded-circle me-2 user-avatar" alt="Avatar">
-                            <div>
-                                <h6 class="author-text mb-0">Marco Antonio</h6>
-                                <small class="text-muted">@Marcus_Antonius</small>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-3">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==" class="rounded-circle me-2 user-avatar" alt="Avatar">
-                            <div>
-                                <h6 class="author-text mb-0">Octavio Augusto</h6>
-                                <small class="text-muted">@Augustus_Caesar</small>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==" class="rounded-circle me-2 user-avatar" alt="Avatar">
-                            <div>
-                                <h6 class="author-text mb-0">Cleopatra</h6>
-                                <small class="text-muted">@Cleopatra_VII</small>
-                            </div>
+                        <!-- filled by JS -->
+                        <div class="placeholder-glow">
+                            <div class="mb-3 placeholder col-12" style="height:54px"></div>
+                            <div class="mb-3 placeholder col-12" style="height:54px"></div>
+                            <div class="mb-3 placeholder col-12" style="height:54px"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Columna central - Feed -->
+
+            <!-- Columna central - Feed dinámico -->
             <div class="col-md-6">
                 <div class="card roman-card mb-4">
                     <div class="card-body">
                         <div class="d-flex">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==" class="rounded-circle me-3 user-avatar" alt="Avatar">
+                            <img id="composer-avatar" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==" class="rounded-circle me-3 user-avatar" alt="Avatar">
                             <div class="w-100">
-                                <textarea class="form-control roman-input" rows="3" placeholder="¿Qué está pasando en el Imperio, César?"></textarea>
-                                <div class="d-flex justify-content-between mt-2">
-                                    <div>
-                                        <button class="btn roman-icon-btn">
-                                            <i class="fas fa-image"></i>
-                                        </button>
-                                        <button class="btn roman-icon-btn">
-                                            <i class="fas fa-map-marker-alt"></i>
-                                        </button>
+                                <form id="new-post-form">
+                                    <textarea id="new-post-content" name="content" class="form-control roman-input" rows="3" placeholder="¿Qué está pasando en el Imperio, César?"></textarea>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div>
+                                            <button type="button" id="attach-image" class="btn roman-icon-btn"><i class="fas fa-image"></i></button>
+                                            <button type="button" id="attach-location" class="btn roman-icon-btn"><i class="fas fa-map-marker-alt"></i></button>
+                                        </div>
+                                        <button type="submit" class="btn roman-btn">Publicar Edicto</button>
                                     </div>
-                                    <button class="btn roman-btn">Publicar Edicto</button>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Publicaciones -->
-                <div class="card roman-card mb-3">
-                    <div class="card-body">
-                        <div class="d-flex">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==" class="rounded-circle me-3 user-avatar" alt="Avatar">
-                            <div>
-                                <h6 class="author-text mb-0">Marco Antonio <span class="time-meta">@Marcus_Antonius · 2h</span></h6>
-                                <p class="golden-text mt-2 decorative-border">¡Victoria en la batalla de Actium! Los seguidores de Octavio han sido derrotados. Roma es nuestra. <span class="hashtag">#Victoria</span> <span class="hashtag">#RomaEterna</span></p>
-                                <div class="d-flex justify-content-between mt-3">
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-comment"></i> <span class="interaction-count">24</span>
-                                    </button>
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-retweet"></i> <span class="interaction-count">45</span>
-                                    </button>
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-heart"></i> <span class="interaction-count">128</span>
-                                    </button>
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-share"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card roman-card mb-3">
-                    <div class="card-body">
-                        <div class="d-flex">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==" class="rounded-circle me-3 user-avatar" alt="Avatar">
-                            <div>
-                                <h6 class="author-text mb-0">Cleopatra <span class="time-meta">@Cleopatra_VII · 4h</span></h6>
-                                <p class="golden-text mt-2 decorative-border">El Nilo fluye con abundancia este año. Bendiciones de Isis para todos. <span class="hashtag">#Egipto</span> <span class="hashtag">#Nilo</span> <span class="hashtag">#Prosperidad</span></p>
-                                <div class="d-flex justify-content-between mt-3">
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-comment"></i> <span class="interaction-count">56</span>
-                                    </button>
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-retweet"></i> <span class="interaction-count">32</span>
-                                    </button>
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-heart"></i> <span class="interaction-count">210</span>
-                                    </button>
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-share"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card roman-card">
-                    <div class="card-body">
-                        <div class="d-flex">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMiIgZmlsbD0iI2I4YTQ3ZSIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMzYTJjMWUiLz48cGF0aCBkPSJNMTIgMjFhOSA5IDAgMCAwIDktOSA3IDcgMCAwIDAtMTQgMCA5IDkgMCAwIDAgOSA5eiIgZmlsbD0iIzNhMmMxZSIvPjwvc3ZnPg==" class="rounded-circle me-3 user-avatar" alt="Avatar">
-                            <div>
-                                <h6 class="author-text mb-0">Cicerón <span class="time-meta">@Cicero · 6h</span></h6>
-                                <p class="golden-text mt-2 decorative-border">Hoy en el Senado discutiremos la reforma agraria. La equidad en la distribución de tierras es fundamental para la estabilidad de la República. <span class="hashtag">#Senado</span> <span class="hashtag">#ReformaAgraria</span> <span class="hashtag">#Roma</span></p>
-                                <div class="d-flex justify-content-between mt-3">
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-comment"></i> <span class="interaction-count">42</span>
-                                    </button>
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-retweet"></i> <span class="interaction-count">18</span>
-                                    </button>
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-heart"></i> <span class="interaction-count">89</span>
-                                    </button>
-                                    <button class="btn roman-icon-btn">
-                                        <i class="fas fa-share"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+
+                <div id="feed-container">
+                    <!-- posts injected by JS -->
+                    <div class="placeholder-glow">
+                        <div class="card roman-card mb-3"><div class="card-body"><div class="placeholder col-12" style="height:120px"></div></div></div>
+                        <div class="card roman-card mb-3"><div class="card-body"><div class="placeholder col-12" style="height:120px"></div></div></div>
                     </div>
                 </div>
             </div>
-            
-            <!-- Columna derecha -->
+
+            <!-- Columna derecha (tendencias estáticas) -->
             <div class="col-md-3">
                 <div class="card roman-card mb-4">
                     <div class="card-header">
@@ -425,8 +329,7 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Elemento decorativo romano -->
+
                 <div class="card roman-card">
                     <div class="card-body text-center">
                         <i class="fas fa-landmark fa-3x mb-3" style="color: var(--bronze-dark);"></i>
@@ -441,5 +344,6 @@
     </div>
 
     <script src="/script.js"></script>
+    <script>if (typeof initHome === 'function') initHome();</script>
 </body>
 </html>
