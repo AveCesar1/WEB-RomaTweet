@@ -155,6 +155,37 @@ function requireAuth(req, res, next) {
 
 app.use(express.static("public"));
 
+// helper: normalize sqlite datetime strings ("YYYY-MM-DD HH:MM:SS") to ISO 8601 (UTC)
+function toIsoUtc(ts) {
+  try {
+    if (!ts) return ts;
+    let s = String(ts).trim();
+    // if already ISO-like with T or timezone, try to parse and return toISOString
+    if (s.includes('T') || s.includes('Z') || s.includes('+')) {
+      const d = new Date(s);
+      if (!isNaN(d.getTime())) return d.toISOString();
+    }
+    // convert space to T and append Z to indicate UTC
+    s = s.replace(' ', 'T');
+    if (!s.endsWith('Z')) s = s + 'Z';
+    const d = new Date(s);
+    if (isNaN(d.getTime())) return ts;
+    return d.toISOString();
+  } catch (e) {
+    return ts;
+  }
+}
+
+function normalizeRowDates(row, fields) {
+  if (!row) return row;
+  for (const f of fields) {
+    if (row[f]) {
+      row[f] = toIsoUtc(row[f]);
+    }
+  }
+  return row;
+}
+
 // routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'login.html'));
@@ -183,6 +214,7 @@ app.get('/api/me', requireAuth, (req, res) => {
     if (!userId) return res.status(401).json({ error: 'unauthorized' });
     const user = database.prepare('SELECT id, full_name, username, email, bio, avatar, created_at FROM users WHERE id = ?').get(userId);
     if (!user) return res.status(404).json({ error: 'not_found' });
+    user.created_at = toIsoUtc(user.created_at);
     const postsCount = database.prepare('SELECT COUNT(*) as cnt FROM posts WHERE user_id = ?').get(userId).cnt || 0;
     const followersCount = database.prepare('SELECT COUNT(*) as cnt FROM followers WHERE followed_id = ?').get(userId).cnt || 0;
     const followingCount = database.prepare('SELECT COUNT(*) as cnt FROM followers WHERE follower_id = ?').get(userId).cnt || 0;
@@ -199,6 +231,7 @@ app.get('/api/me/posts', requireAuth, (req, res) => {
     const userId = req.session && req.session.user_id;
     if (!userId) return res.status(401).json({ error: 'unauthorized' });
     const posts = database.prepare('SELECT id, content, created_at, edited_at FROM posts WHERE user_id = ? ORDER BY created_at DESC LIMIT 100').all(userId);
+    posts.forEach(p => normalizeRowDates(p, ['created_at','edited_at']));
     res.json({ posts });
   } catch (err) {
     console.error(err);
@@ -253,6 +286,7 @@ app.get('/api/feed', requireAuth, (req, res) => {
       ORDER BY p.created_at DESC
       LIMIT 100
     `).all();
+    rows.forEach(r => normalizeRowDates(r, ['created_at','edited_at']));
     res.json({ posts: rows });
   } catch (err) {
     console.error(err);
@@ -357,6 +391,7 @@ app.post('/api/me/posts', requireAuth, (req, res) => {
     const info = database.prepare('INSERT INTO posts (user_id, content) VALUES (?, ?)').run(userId, String(content).trim());
     const postId = info && (info.lastInsertRowid || info.lastInsertRowId || info.lastInsertRowid);
     const post = database.prepare('SELECT id, content, created_at, edited_at FROM posts WHERE id = ?').get(postId);
+    normalizeRowDates(post, ['created_at','edited_at']);
     return res.json({ ok: true, post });
   } catch (err) {
     console.error(err);
@@ -378,6 +413,7 @@ app.get('/api/me/likes', requireAuth, (req, res) => {
       ORDER BY l.created_at DESC
       LIMIT 100
     `).all(userId) || [];
+    rows.forEach(r => normalizeRowDates(r, ['created_at','liked_at']));
     res.json({ posts: rows });
   } catch (err) {
     console.error(err);
@@ -400,6 +436,7 @@ app.get('/api/me/replies', requireAuth, (req, res) => {
       ORDER BY c.created_at DESC
       LIMIT 100
     `).all(userId) || [];
+    rows.forEach(r => normalizeRowDates(r, ['commented_at']));
     res.json({ replies: rows });
   } catch (err) {
     console.error(err);
